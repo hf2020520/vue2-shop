@@ -8,7 +8,7 @@
         <div class="filter-nav">
           <span class="sortby">排序:</span>
           <a href="javascript:void(0)" class="default cur" @click="defaultSort()">默认</a>
-          <a href="javascript:void(0)" class="price">价格 <svg class="icon icon-arrow-short"><use xlink:href="#icon-arrow-short"></use></svg></a>
+          <a href="javascript:void(0)" class="price" :class="{'sort-up' : 'sortFlag'}" @click="sortGoods()">价格 <svg class="icon icon-arrow-short"><use xlink:href="#icon-arrow-short"></use></svg></a>
           <a href="javascript:void(0)" class="filterby" @click.stop="showFilterPop">筛选</a>
         </div>
         <div class="accessory-result">
@@ -40,6 +40,12 @@
                   </div>
                 </li>
               </ul>
+            </div>
+            <div class="view-more-normal"
+                 v-infinite-scroll="loadMore"
+                 infinite-scroll-disabled="busy"
+                 infinite-scroll-distance="20">
+              <img src="./../../static/loading-svg/loading-spinning-bubbles.svg" alt="" v-show="loading">
             </div>
           </div>
         </div>
@@ -154,6 +160,18 @@
         this.sortFlag = true
         this.page = 1
         this.getGoodsList()
+      },
+      sortGoods () {
+        this.sortFlag = !this.sortFlag
+        this.page = 1
+        this.getGoodsList()
+      },
+      loadMore () {
+        this.busy = true
+        setTimeout(() => {
+          this.page++
+          this.getGoodsList(true)
+        }, 500)
       }
     }
   }
