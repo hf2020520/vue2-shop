@@ -1,6 +1,3 @@
-/**
-* Created by Song on 2017/10/30.
-*/
 <template>
   <div class="hello">
     <body>
@@ -10,7 +7,7 @@
       <div class="container">
         <div class="filter-nav">
           <span class="sortby">排序:</span>
-          <a href="javascript:void(0)" class="default cur">默认</a>
+          <a href="javascript:void(0)" class="default cur" @click="defaultSort()">默认</a>
           <a href="javascript:void(0)" class="price">价格 <svg class="icon icon-arrow-short"><use xlink:href="#icon-arrow-short"></use></svg></a>
           <a href="javascript:void(0)" class="filterby" @click.stop="showFilterPop">筛选</a>
         </div>
@@ -94,7 +91,12 @@
         ],
         priceChecked: 'all',
         filterBy: false,
-        overLayFlag: false
+        overLayFlag: false,
+        sortFlag: true,
+        page: 2,
+        pageSize: 8,
+        busy: true,
+        loading: false
       }
     },
     mounted () {
@@ -106,10 +108,34 @@
       NavBread
     },
     methods: {
-      getGoodsList () {
-        axios.get('/goods').then((result) => {
+      getGoodsList (flag) {
+        var param = {
+          page: this.page,
+          pageSize: this.pageSize,
+          sort: this.sortFlag ? 1 : -1
+        }
+        this.loading = true
+        axios.get('http://localhost:3000/goods', {
+          params: param
+        }).then((result) => {
+          console.log(result.data.result)
           var res = result.data
-          this.goodsList = res.result
+          this.loading = false
+          if (res.status === '0') {
+            if (flag) {
+              this.goodsList = this.goodsList.concat(res.result.list)
+              if (res.result.count === 0) {
+                this.busy = true
+              } else {
+                this.busy = false
+              }
+            } else {
+              this.goodsList = res.result.list
+              this.busy = false
+            }
+          } else {
+            this.goodsList = []
+          }
         })
       },
       setPriceFilter (index) {
@@ -123,6 +149,11 @@
       closePop () {
         this.filterBy = false
         this.overLayFlag = false
+      },
+      defaultSort () {
+        this.sortFlag = true
+        this.page = 1
+        this.getGoodsList()
       }
     }
   }
