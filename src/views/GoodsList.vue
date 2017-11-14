@@ -99,7 +99,7 @@
         filterBy: false,
         overLayFlag: false,
         sortFlag: true,
-        page: 2,
+        page: 1,
         pageSize: 8,
         busy: true,
         loading: false

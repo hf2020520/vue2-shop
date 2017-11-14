@@ -1,5 +1,6 @@
 var mongoose = require('mongoose')
 var Schema = mongoose.Schema
+
 var produtSchema = new Schema({
   'productId': {type: String},
   'productName': String,
@@ -8,4 +9,5 @@ var produtSchema = new Schema({
   'productNum': Number,
   'productImage': String
 })
+
 module.exports = mongoose.model('Good', produtSchema)

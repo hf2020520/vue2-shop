@@ -3,16 +3,19 @@ var router = express.Router()
 var mongoose = require('mongoose')
 var Goods = require('./../models/goods')
 
-// 连接数据库
+// 连接MongoDB数据库
 mongoose.connect('mongodb://dn_dba:pwd_song@101.200.129.112:27017/vue_shop_lesson', {auto_reconnect: true})
+
 mongoose.connection.on('connected', function () {
-  console.log('mongodb connected success')
+  console.log('MongoDB connected success.')
 })
+
 mongoose.connection.on('error', function () {
-  console.log('mongodb connected fail')
+  console.log('MongoDB connected fail.')
 })
+
 mongoose.connection.on('disconnected', function () {
-  console.log('mongodb connected discontected')
+  console.log('MongoDB connected disconnected.')
 })
 
 /* 查询商品列表数据 */
@@ -23,7 +26,7 @@ router.get('/', function (req, res, next) {
   let skip = (page - 1) * pageSize
   let params = {}
   let goodsModel = Goods.find(params).skip(skip).limit(pageSize)
-  goodsModel.sort({ 'salePrice': sort })
+  goodsModel.sort({'salePrice': sort})
   goodsModel.exec(function (err, doc) {
     if (err) {
       res.json({
