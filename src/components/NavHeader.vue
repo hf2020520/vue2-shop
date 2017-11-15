@@ -95,6 +95,9 @@
         nickName: ''
       }
     },
+    mounted () {
+      this.checkLogin()
+    },
     methods: {
       login () {
         if (!this.userName || !this.userPwd) {
@@ -121,6 +124,15 @@
           console.log(res)
           if (res.status === '0') {
             this.nickName = ''
+          }
+        })
+      },
+      checkLogin () {
+        axios.get('/users/checkLogin').then((res) => {
+          res = res.data
+          if (res.status === '0') {
+            this.nickName = res.result
+            this.loginModalFlag = false
           }
         })
       }

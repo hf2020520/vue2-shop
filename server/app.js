@@ -35,7 +35,7 @@ app.all('*', function (req, res, next) {
 
 // 登录拦截
 app.use(function (req, res, next) {
-  if (req.cookie.userId) {
+  if (req.cookies.userId) {
     next()
   } else {
     console.log('url:' + req.originalUrl)
