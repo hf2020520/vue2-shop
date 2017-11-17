@@ -51,11 +51,11 @@ router.post('/logout', function (req, res, next) {
 
 // 检查登录状态cookie
 router.get('/checkLogin', function (req, res, next) {
-  if (req.cookie.userId) {
+  if (req.cookies.userId) {
     res.json({
       status: '0',
       msg: '',
-      result: req.cookie.userName || ''
+      result: req.cookies.userName || ''
     })
   } else {
     res.json({
