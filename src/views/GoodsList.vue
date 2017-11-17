@@ -51,6 +51,14 @@
         </div>
       </div>
     </div>
+    <modal :mdShow="mdShow" v-on:close="closeModal">
+      <p slot="message">
+        请先登录,否则无法加入到购物车中!
+      </p>
+      <div slot="btnGroup">
+        <a class="btn btn--m" href="javascript:void(0);" @click="mdShow = false">关闭</a>
+      </div>
+    </modal>
     <div class="md-overlay" v-show="overLayFlag" @click.stop="closePop"></div>
     <nav-footer></nav-footer>
     </body>
@@ -63,6 +71,7 @@
   import NavHeader from './../components/NavHeader.vue'
   import NavFooter from './../components/NavFooter.vue'
   import NavBread from './../components/NavBread.vue'
+  import Modal from './../components/Modal.vue'
   import axios from 'axios'
 
   export default {
@@ -102,7 +111,8 @@
         page: 1,
         pageSize: 8,
         busy: true,
-        loading: false
+        loading: false,
+        mdShow: false
       }
     },
     mounted () {
@@ -111,7 +121,8 @@
     components: {
       NavHeader,
       NavFooter,
-      NavBread
+      NavBread,
+      Modal
     },
     methods: {
       getGoodsList (flag) {
@@ -182,11 +193,15 @@
         }).then((res) => {
           res = res.data
           if (res.status === '0') {
-            alert('加入成功')
+            /* alert('加入成功') */
           } else {
-            alert('Error msg:' + res.msg)
+            /* alert('Error msg:' + res.msg) */
+            this.mdShow = true
           }
         })
+      },
+      closeModal () {
+        this.mdShow = false
       }
     }
   }

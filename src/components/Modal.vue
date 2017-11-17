@@ -20,14 +20,14 @@
 </template>
 
 <script>
-    export default {
-        props: ['mdshow'],
-        methods: {
-          closeModal () {
-            this.$emit('close')
-          }
-        }
+  export default {
+    props: ['mdShow'],
+    methods: {
+      closeModal () {
+        this.$emit('close')
+      }
     }
+  }
 </script>
 
 
