@@ -82,9 +82,9 @@
                   <div class="item-quantity">
                     <div class="select-self select-self-open">
                       <div class="select-self-area">
-                        <a class="input-sub">-</a>
+                        <a class="input-sub" @click="editCart('minu',item)">-</a>
                         <span class="select-ipt" >{{item.productNum}}</span>
-                        <a class="input-add">+</a>
+                        <a class="input-add" @click="editCart('add',item)">+</a>
                       </div>
                     </div>
                   </div>
@@ -157,7 +157,7 @@
     },
     computed: {
       totalPrice () {
-        let money = 0
+        var money = 0
         this.cartList.forEach((item) => {
           if (item.checked === '1') {
             money += parseFloat(item.salePrice) * parseInt(item.productNum)
@@ -172,6 +172,28 @@
           let res = response.data
           this.cartList = res.result
           console.log(res.result)
+        })
+      },
+      editCart (flag, item) {
+        if (flag === 'add') {
+          item.productNum ++
+        } else if (flag === 'minu') {
+          if (item.productNum <= 1) {
+            return
+          }
+          item.productNum --
+        } else {
+          item.checked = item.checked === '1' ? '0' : '1'
+        }
+        axios.post('/users/cartEdit', {
+          productId: item.productId,
+          productNum: item.productNum,
+          checked: item.checked
+        }).then((response) => {
+          let res = response.data
+          if (res.status === '0') {
+            console.log('update cart')
+          }
         })
       }
     }

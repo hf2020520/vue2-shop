@@ -88,4 +88,29 @@ router.get('/cartList', function (req, res, next) {
   })
 })
 
+// 修改商品数量
+router.post('/cartEdit', function (req, res, next) {
+  var userId = req.cookies.userId
+  var productId = req.body.productId
+  var productNum = req.body.productNum
+  var checked = req.body.checked
+  User.update({'userId': userId, 'cartList.productId': productId}, {
+    'cartList.$.productNum': productNum,
+    'cartList.$.checked': checked
+  }, function (err, doc) {
+    if (err) {
+      res.json({
+        status: '1',
+        msg: err.message,
+        result: ''
+      })
+    } else {
+      res.json({
+        status: '0',
+        msg: '',
+        result: 'suc'
+      })
+    }
+  })
+})
 module.exports = router
