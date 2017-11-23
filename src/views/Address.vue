@@ -116,7 +116,7 @@
             </div>
           </div>
           <div class="next-btn-wrap">
-            <router-link class="btn btn--m btn--red" >去结算</router-link>
+            <router-link class="btn btn--m btn--red" :to="{path:'orderConfirm',query:{'addressId':selectedAddrId}}">去结算</router-link>
           </div>
         </div>
       </div>
