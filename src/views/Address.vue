@@ -88,7 +88,7 @@
             </div>
 
             <div class="shipping-addr-more">
-              <a class="addr-more-btn up-down-btn" href="javascript:;">
+              <a class="addr-more-btn up-down-btn" href="javascript:;" @click="expand" :class="{'open':limit>3}">
                 更多地址
                 <i class="i-up-down">
                   <i class="i-up-down-l"></i>
@@ -181,6 +181,13 @@
             this.init()
           }
         })
+      },
+      expand () {
+        if (this.limit === 3) {
+          this.limit = this.addressList.length
+        } else {
+          this.limit = 3
+        }
       }
     }
   }
