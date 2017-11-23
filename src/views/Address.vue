@@ -60,7 +60,7 @@
           <div class="addr-list-wrap">
             <div class="addr-list">
               <ul>
-                <li v-for="(item,index) in addressList">
+                <li v-for="(item,index) in addressListFilter" :class="{'check':checkIndex==index}" @click="checkIndex=index;selectedAddrId=item.addressId">
                   <dl>
                     <dt>{{item.userName}}</dt>
                     <dd class="address">{{item.streetName}}</dd>
@@ -72,9 +72,9 @@
                     </a>
                   </div>
                   <div class="addr-opration addr-set-default">
-                    <a href="javascript:;" class="addr-set-default-btn"><i>设为默认地址</i></a>
+                    <a href="javascript:;" class="addr-set-default-btn" v-if="!item.isDefault" @click="setDefault(item.addressId)"><i>设为默认地址</i></a>
                   </div>
-                  <div class="addr-opration addr-default">默认地址</div>
+                  <div class="addr-opration addr-default" v-if="item.isDefault">默认地址</div>
                 </li>
                 <li class="addr-new">
                   <div class="add-new-inner">
@@ -143,11 +143,19 @@
   export default {
     data () {
       return {
+        limit: 3,
+        checkIndex: 0,
+        selectedAddrId: '',
         addressList: []
       }
     },
     mounted () {
       this.init()
+    },
+    computed: {
+      addressListFilter () {
+        return this.addressList.slice(0, this.limit)
+      }
     },
     components: {
       NavHeader,
@@ -161,6 +169,17 @@
           let res = response.data
           this.addressList = res.result
           console.log(res.result)
+        })
+      },
+      setDefault (addressId) {
+        axios.post('/users/setDefault', {
+          addressId: addressId
+        }).then((response) => {
+          let res = response.data
+          if (res.status === '0') {
+            console.log('set default')
+            this.init()
+          }
         })
       }
     }
