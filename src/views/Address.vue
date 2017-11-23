@@ -67,7 +67,7 @@
                     <dd class="tel">{{item.tel}}</dd>
                   </dl>
                   <div class="addr-opration addr-del">
-                    <a href="javascript:;" class="addr-del-btn">
+                    <a href="javascript:;" class="addr-del-btn" @click="delAddressConfirm(item.addressId)">
                       <svg class="icon icon-del"><use xlink:href="#icon-del"></use></svg>
                     </a>
                   </div>
@@ -121,15 +121,15 @@
         </div>
       </div>
     </div>
-<!--    <modal :mdShow="isMdShow" @close="closeModal">
+    <modal :mdShow="isMdShow" @close="closeModal">
       <p slot="message">
         您是否确认要删除此地址?
       </p>
       <div slot="btnGroup">
-        <a class="btn btn&#45;&#45;m" href="javascript:;" @click="delAddress">确认</a>
-        <a class="btn btn&#45;&#45;m btn&#45;&#45;red" href="javascript:;" @click="isMdShow=false">取消</a>
+        <a class="btn btn--m" href="javascript:;" @click="delAddress">确认</a>
+        <a class="btn btn--m btn--red" href="javascript:;" @click="isMdShow=false">取消</a>
       </div>
-    </modal>-->
+    </modal>
     <nav-footer></nav-footer>
   </div>
 </template>
@@ -146,7 +146,9 @@
         limit: 3,
         checkIndex: 0,
         selectedAddrId: '',
-        addressList: []
+        addressList: [],
+        isMdShow: false,
+        addressId: ''
       }
     },
     mounted () {
@@ -188,6 +190,28 @@
         } else {
           this.limit = 3
         }
+      },
+      closeModal () {
+        this.isMdShow = false
+      },
+      delAddressConfirm (addressId) {
+        this.isMdShow = true
+        this.addressId = addressId
+      },
+      delAddress () {
+        axios.post('/users/delAddress', {
+          addressId: this.addressId
+        }).then((response) => {
+          let res = response.data
+          if (res.status === '0') {
+            console.log('del suc')
+            this.isMdShow = false
+            this.init()
+          } else {
+            this.isMdShow = false
+            alert(res.msg)
+          }
+        })
       }
     }
   }
