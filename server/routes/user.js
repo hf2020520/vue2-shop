@@ -358,7 +358,7 @@ router.post('/payMent', function (req, res, next) {
 })
 
 // 根据订单id查询订单信息
-router.post('/orderDetail', function (req, res, next) {
+router.get('/orderDetail', function (req, res, next) {
   var userId = req.cookies.userId
   var orderId = req.param('orderId')
   User.findOne({userId: userId}, function (err, userInfo) {
@@ -405,7 +405,7 @@ router.post('/orderDetail', function (req, res, next) {
 })
 
 // 获取购物车商品数量
-router.post('/getCartCount', function (req, res, next) {
+router.get('/getCartCount', function (req, res, next) {
   if (req.cookies && req.cookies.userId) {
     console.log('userId:' + req.cookies.userId)
     var userId = req.cookies.userId

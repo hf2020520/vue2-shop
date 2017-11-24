@@ -14,15 +14,13 @@ Vue.use(VueLazyload, {
   loading: 'static/loading-svg/loading-bars.svg',
   attempt: 3 // default 1
 })
-
 Vue.config.productionTip = false
-
 const store = new Vuex.Store({
   state: {
     nickName: '',
     cartCount: 0
   },
-  mutation: {
+  mutations: {
     // 更新用户信息
     updateUserInfo (state, nickName) {
       state.nickName = nickName
@@ -33,20 +31,19 @@ const store = new Vuex.Store({
     }
   }
 })
-
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
-  router,
   store,
+  router,
   mounted () {
     this.checkLogin()
     this.getCartCount()
   },
-  method: {
+  methods: {
     checkLogin () {
-      axios.get('/users/checkLogin').then(response => {
-        var res = response.data()
+      axios.get('users/checkLogin').then((response) => {
+        var res = response.data
         if (res.status === '0') {
           this.$store.commit('updateUserInfo', res.result)
         } else {
@@ -57,7 +54,7 @@ new Vue({
       })
     },
     getCartCount () {
-      axios.get('/users/getCartCount').then((response) => {
+      axios.get('users/getCartCount').then(response => {
         var res = response.data
         if (res.status === '0') {
           this.$store.commit('updateCartCount', res.result)
