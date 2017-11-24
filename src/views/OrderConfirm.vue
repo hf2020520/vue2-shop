@@ -119,7 +119,7 @@
             <router-link class="btn btn--m" to="/address">修改订单</router-link>
           </div>
           <div class="next-btn-wrap">
-            <button class="btn btn--m btn--red">提交订单</button>
+            <button class="btn btn--m btn--red" @click="payMent">提交订单</button>
           </div>
         </div>
       </div>
@@ -167,6 +167,21 @@
             }
           })
           this.orderTotal = this.subTotal + this.shipping - this.discount + this.tax
+        })
+      },
+      payMent () {
+        var addressId = this.$route.query.addressId
+        axios.post('/users/payMent', {
+          addressId: addressId,
+          orderTotal: this.orderTotal
+        }).then((response) => {
+          let res = response.data
+          if (res.status === '0') {
+            alert('11')
+            // this.$router.push({
+              // path:'/orderSuccess?orderId='+res.result.orderId
+            // })
+          }
         })
       }
     }
