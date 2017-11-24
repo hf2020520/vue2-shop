@@ -404,4 +404,37 @@ router.post('/orderDetail', function (req, res, next) {
   })
 })
 
+// 获取购物车商品数量
+router.post('/getCartCount', function (req, res, next) {
+  if (req.cookies && req.cookies.userId) {
+    console.log('userId:' + req.cookies.userId)
+    var userId = req.cookies.userId
+    User.findOne({'userId': userId}, function (err, doc) {
+      if (err) {
+        res.json({
+          status: '1',
+          msg: err.message
+        })
+      } else {
+        let cartList = doc.cartList
+        let cartCount = 0
+        cartList.map(function (item) {
+          cartCount += parseInt(item.productNum)
+          console.log(cartCount)
+        })
+        res.json({
+          status: '0',
+          msg: '',
+          result: cartCount
+        })
+      }
+    })
+  } else {
+    res.json({
+      status: '1',
+      msg: '当前用户不存在'
+    })
+  }
+})
+
 module.exports = router
