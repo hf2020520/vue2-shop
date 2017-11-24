@@ -38,6 +38,33 @@ const store = new Vuex.Store({
 new Vue({
   el: '#app',
   router,
+  store,
+  mounted () {
+    this.checkLogin()
+    this.getCartCount()
+  },
+  method: {
+    checkLogin () {
+      axios.get('/users/checkLogin').then(response => {
+        var res = response.data()
+        if (res.status === '0') {
+          this.$store.commit('updateUserInfo', res.result)
+        } else {
+          if (this.$route.path !== '/GoodsList') {
+            this.$router.push('/GoodsList')
+          }
+        }
+      })
+    },
+    getCartCount () {
+      axios.get('/users/getCartCount').then((response) => {
+        var res = response.data
+        if (res.status === '0') {
+          this.$store.commit('updateCartCount', res.result)
+        }
+      })
+    }
+  },
   template: '<App/>',
   components: { App }
 })
