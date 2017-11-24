@@ -177,10 +177,9 @@
         }).then((response) => {
           let res = response.data
           if (res.status === '0') {
-            alert('11')
-            // this.$router.push({
-              // path:'/orderSuccess?orderId='+res.result.orderId
-            // })
+            this.$router.push({
+              path: '/orderSuccess?orderId=' + res.result.orderId
+            })
           }
         })
       }
