@@ -36,7 +36,7 @@
             <a href="javascript:void(0)" class="navbar-link" @click="loginModalFlag=true" v-if="!nickName">登录</a>
             <a href="javascript:void(0)" class="navbar-link" @click="logOut" v-else>登出</a>
             <div class="navbar-cart-container">
-              <span class="navbar-cart-count" v-text="cartCount" v-if="cartCount"></span>
+              <span class="navbar-cart-count" v-text="cartCount" v-if="cartCount && showCart"></span>
               <a class="navbar-link" href="/#/cart">
                 <svg class="navbar-cart-logo">
                   <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-cart"></use>
@@ -92,7 +92,8 @@
         userName: 'admin',
         userPwd: '123456',
         errorTip: false,
-        loginModalFlag: false
+        loginModalFlag: false,
+        showCart: false
       }
     },
     computed: {
@@ -128,7 +129,10 @@
           res = res.data
           console.log(res)
           if (res.status === '0') {
-            this.nickName = ''
+            // this.nickName = ''
+            this.$store.commit('updateUserInfo', res.result.userName)
+            this.$store.commit('updateCartCount', res.result)
+            this.showCart = false
           }
         })
       },
@@ -139,6 +143,7 @@
           if (res.status === '0') {
            // this.nickName = res.result
             this.$store.commit('updateUserInfo', res.result)
+            this.showCart = true
             this.loginModalFlag = false
           } else {
             if (this.$route.path !== '/GoodsList') {
@@ -152,6 +157,7 @@
           let res = response.data
           console.log(res.result)
           this.$store.commit('updateCartCount', res.result)
+          this.showCart = true
         })
       }
     }
